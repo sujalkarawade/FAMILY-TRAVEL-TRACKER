@@ -388,10 +388,16 @@
   <h2 class="total-count">Total Countries: <%=total%>
   </h2>
   <script>
-    const country_codes = "<%= countries %>".split(",")
-    console.log(typeof ("<%= countries %>"))
+    // Parse server-provided countries safely: ignore empty entries and trim codes
+    const raw = "<%= countries %>";
+    const country_codes = raw ? raw.split(",").map(s => s.trim()).filter(Boolean) : [];
     country_codes.forEach(code => {
-      document.getElementById(code).style.fill = "<%= color %>"
+      const el = document.getElementById(code);
+      if (el) {
+        el.style.fill = "<%= color %>";
+      } else {
+        console.warn('Country path not found for code:', code);
+      }
     });
   </script>
 </body>
