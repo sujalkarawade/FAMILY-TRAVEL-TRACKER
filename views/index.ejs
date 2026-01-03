@@ -9,17 +9,24 @@
 </head>
 
 <body>
-  <form class="tab-view tab-view-height-auto" action="/user" method="post">
-    <% users.forEach(function(user) { %>
-      <input type="submit" name="user" value="<%= user.id %>" id="<%= user.id %>">
-      <label for="<%= user.id %>" style="background-color: <%= user.color %>;">
-        <%= user.name %>
-      </label>
-      <% }); %>
-
-        <input type="submit" name="add" value="new" id="tab">
-        <label for="tab">Add Family Member</label>
-
+  <form class="user-dropdown-form" action="/user" method="post">
+    <div class="user-dropdown">
+      <button type="button" class="user-dropdown-btn" id="userDropdownBtn" style="background-color: <%= color %>;">
+        <% const currentUserDisplay = users.find(u => u.id == currentUserId) || users[0]; %>
+        <span id="currentUserName"><%= currentUserDisplay.name %></span>
+        <span class="dropdown-arrow">▼</span>
+      </button>
+      <div class="user-dropdown-menu" id="userDropdownMenu">
+        <% users.forEach(function(user) { %>
+          <button type="submit" name="user" value="<%= user.id %>" class="user-dropdown-item" style="background-color: <%= user.color %>;">
+            <%= user.name %>
+          </button>
+        <% }); %>
+        <button type="submit" name="add" value="new" class="user-dropdown-item add-member-btn">
+          + Add Family Member
+        </button>
+      </div>
+    </div>
   </form>
 
   <form action="/add" method="post">
@@ -388,6 +395,31 @@
   <h2 class="total-count">Total Countries: <%=total%>
   </h2>
   <script>
+    // Dropdown functionality
+    const dropdownBtn = document.getElementById('userDropdownBtn');
+    const dropdownMenu = document.getElementById('userDropdownMenu');
+    const dropdown = document.querySelector('.user-dropdown');
+
+    dropdownBtn.addEventListener('click', function(e) {
+      e.stopPropagation();
+      dropdown.classList.toggle('active');
+    });
+
+    // Close dropdown when clicking outside
+    document.addEventListener('click', function(e) {
+      if (!dropdown.contains(e.target)) {
+        dropdown.classList.remove('active');
+      }
+    });
+
+    // Close dropdown when a user is selected
+    const dropdownItems = document.querySelectorAll('.user-dropdown-item');
+    dropdownItems.forEach(item => {
+      item.addEventListener('click', function() {
+        dropdown.classList.remove('active');
+      });
+    });
+
     // Parse server-provided countries safely: ignore empty entries and trim codes
     const raw = "<%= countries %>";
     const country_codes = raw ? raw.split(",").map(s => s.trim()).filter(Boolean) : [];

@@ -44,14 +44,20 @@ async function getCurrentUser() {
 }
 
 app.get("/", async (req, res) => {
-  const countries = await checkVisisted();
-  const currentUser = await getCurrentUser();
-  res.render("index.ejs", {
-    countries: countries,
-    total: countries.length,
-    users: users,
-    color: currentUser.color,
-  });
+  try {
+    const countries = await checkVisisted();
+    const currentUser = await getCurrentUser();
+    res.render("index.ejs", {
+      countries: countries,
+      total: countries.length,
+      users: users,
+      color: currentUser.color,
+      currentUserId: currentUserId,
+    });
+  } catch (err) {
+    console.error("Error loading home page:", err);
+    res.status(500).send("Error loading page");
+  }
 });
 app.post("/add", async (req, res) => {
   const input = req.body["country"];
