@@ -23,16 +23,38 @@
           </button>
         <% }); %>
         <button type="submit" name="add" value="new" class="user-dropdown-item add-member-btn">
-          + Add Family Member
+          + Add Member
         </button>
       </div>
     </div>
   </form>
 
-  <form action="/add" method="post">
-    <input type="text" name="country" autofocus placeholder="<%= locals.error ? error :  'Enter country name'%>">
-    <button type="submit" style="background-color: <%= color %>;">Add</button>
-  </form>
+  <div class="add-country">
+    <button id="addCountryBtn">Add Country</button>
+  </div>
+
+  <script>
+    (function(){
+      var btn = document.getElementById('addCountryBtn');
+      if(!btn) return;
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        var country = prompt('Enter country name');
+        if(country && country.trim()){
+          var form = document.createElement('form');
+          form.method = 'post';
+          form.action = '/add';
+          var input = document.createElement('input');
+          input.type = 'hidden';
+          input.name = 'country';
+          input.value = country.trim();
+          form.appendChild(input);
+          document.body.appendChild(form);
+          form.submit();
+        }
+      });
+    })();
+  </script>
 
   <section class="ag-canvas">
     <svg class="ag-canvas_svg" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -400,15 +422,30 @@
     const dropdownMenu = document.getElementById('userDropdownMenu');
     const dropdown = document.querySelector('.user-dropdown');
 
+    const addCountryContainer = document.querySelector('.add-country');
+
+    function updateAddCountryVisibility() {
+      if (!addCountryContainer) return;
+      if (dropdown.classList.contains('active')) {
+        addCountryContainer.style.display = 'none';
+      } else {
+        addCountryContainer.style.display = '';
+      }
+    }
+
     dropdownBtn.addEventListener('click', function(e) {
       e.stopPropagation();
       dropdown.classList.toggle('active');
+      updateAddCountryVisibility();
     });
 
     // Close dropdown when clicking outside
     document.addEventListener('click', function(e) {
       if (!dropdown.contains(e.target)) {
-        dropdown.classList.remove('active');
+        if (dropdown.classList.contains('active')) {
+          dropdown.classList.remove('active');
+          updateAddCountryVisibility();
+        }
       }
     });
 
@@ -416,7 +453,10 @@
     const dropdownItems = document.querySelectorAll('.user-dropdown-item');
     dropdownItems.forEach(item => {
       item.addEventListener('click', function() {
-        dropdown.classList.remove('active');
+        if (dropdown.classList.contains('active')) {
+          dropdown.classList.remove('active');
+          updateAddCountryVisibility();
+        }
       });
     });
 
@@ -431,6 +471,42 @@
         console.warn('Country path not found for code:', code);
       }
     });
+
+    // Tooltip showing country name on hover
+    (function(){
+      // create tooltip element
+      const tooltip = document.createElement('div');
+      tooltip.className = 'map-tooltip';
+      document.body.appendChild(tooltip);
+
+      const paths = document.querySelectorAll('.ag-canvas_svg path[title]');
+      if(!paths.length) return;
+
+      paths.forEach(path => {
+        path.addEventListener('mouseenter', function(e){
+          const name = path.getAttribute('title') || path.id || '';
+          if(!name) return;
+          tooltip.textContent = name;
+          tooltip.style.display = 'block';
+          // small delay to allow transition if needed
+          requestAnimationFrame(()=> tooltip.style.opacity = '1');
+        });
+
+        path.addEventListener('mousemove', function(e){
+          // position tooltip slightly above cursor
+          const x = e.clientX;
+          const y = e.clientY - 12;
+          tooltip.style.left = x + 'px';
+          tooltip.style.top = y + 'px';
+        });
+
+        path.addEventListener('mouseleave', function(){
+          tooltip.style.opacity = '0';
+          // hide after transition
+          setTimeout(()=> tooltip.style.display = 'none', 120);
+        });
+      });
+    })();
   </script>
 </body>
 

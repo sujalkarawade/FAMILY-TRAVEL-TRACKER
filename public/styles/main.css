@@ -11,7 +11,7 @@ body {
   height: 100%;
 }
 body {
-  background: #21252b;
+  background: #272323;
   font-family: "Roboto", sans-serif;
 }
 
@@ -22,6 +22,9 @@ body {
   -webkit-align-items: center;
   -ms-flex-align: center;
   align-items: center;
+  -webkit-justify-content: center;
+  -ms-flex-pack: center;
+  justify-content: center;
 
   position: relative;
   visibility: visible;
@@ -31,15 +34,16 @@ body {
   padding: 3rem 1rem;
   opacity: 1;
   transition: opacity 0.5s;
-  z-index: -1;
-  margin-top: -80px;
+  z-index: 0;
+  margin-top: 0;
 }
 .ag-canvas_svg {
   display: block;
-  width: 100%;
+  width: 90%;
+  max-width: 1200px;
   height: auto;
   max-height: 100%;
-  margin-left: 1rem;
+  margin: 0 auto;
 }
 .ag-canvas_svg path {
   fill: #383d46;
@@ -48,6 +52,24 @@ body {
   stroke-opacity: 1;
   stroke-width: 0.5;
   transition: 0.5s;
+}
+
+/* Tooltip for country names on hover */
+.map-tooltip {
+  position: fixed;
+  pointer-events: none;
+  background: rgba(197, 197, 197, 0.85);
+  color: #000000;
+  padding: 6px 8px;
+  border-radius: 4px;
+  font-size: 16px;
+  line-height: 1;
+  white-space: nowrap;
+  transform: translate(-50%, -120%);
+  z-index: 2500;
+  display: none;
+  opacity: 0;
+  transition: opacity 0.1s ease;
 }
 
 @media screen and (max-width: 767px) {
@@ -97,8 +119,7 @@ button {
   font-family: "Roboto", sans-serif;
   color: white;
   position: absolute;
-  padding: 15px;
-  left: 0;
+  left: 30px;
   bottom: 0;
 }
 
@@ -129,6 +150,35 @@ form[action="/add"] input {
 form[action="/add"] button {
   flex-shrink: 0;
   min-width: 80px;
+}
+
+/* place single Add Country button under the user dropdown (matches previous form placement) */
+.add-country {
+  position: fixed;
+  top: 70px;
+  left: 1rem;
+  z-index: 100;
+}
+
+.add-country button {
+  padding: 12px 20px;
+  border-radius: 6px;
+}
+
+.add-country button {
+  background-color: #686868; 
+  color: #ffffff;
+  font-family: "Roboto", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.add-country button:hover {
+  transform: scale(1.05);
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
 }
 
 .user-dropdown {
