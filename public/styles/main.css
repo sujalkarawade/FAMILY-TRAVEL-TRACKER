@@ -13,6 +13,12 @@ body {
 body {
   background: #272323;
   font-family: "Roboto", sans-serif;
+  animation: fadeInOpacity 0.8s ease-out;
+}
+
+@keyframes fadeInOpacity {
+  from { opacity: 0; }
+  to { opacity: 1; }
 }
 
 .ag-canvas {
@@ -220,103 +226,10 @@ form[action="/add"] button {
 }
 
 .user-dropdown-menu {
-  display: none;
-  position: absolute;
-  top: 100%;
-  left: 0;
-  margin-top: 8px;
-  background: white;
-  border-radius: 6px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
-  min-width: 180px;
-  overflow: hidden;
-  z-index: 1000;
-}
-
-.user-dropdown.active .user-dropdown-menu {
-  display: block;
-}
-
-.user-dropdown-item {
-  font-family: "Roboto", sans-serif;
-  width: 100%;
-  padding: 12px 20px;
-  text-align: left;
-  border: none;
-  background: white;
-  color: #333;
-  cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s ease;
-  display: block;
-  border-bottom: 1px solid #f0f0f0;
-}
-
-.user-dropdown-item:last-child {
-  border-bottom: none;
-}
-
-.user-dropdown-item:hover {
-  background-color: #f5f5f5;
-}
-
-.user-dropdown-item.add-member-btn {
-  background-color: #f8f9fa;
-  font-weight: 500;
-  color: #666;
-}
-
-.user-dropdown-item.add-member-btn:hover {
-  background-color: #e9ecef;
-}
-
-.user-dropdown-form {
-  position: fixed;
-  top: 1rem;
-  left: 1rem;
-  z-index: 100;
-}
-
-.user-dropdown {
-  position: relative;
-  display: inline-block;
-}
-
-.user-dropdown-btn {
-  font-family: "Roboto", sans-serif;
-  background-color: teal;
-  color: white;
-  padding: 12px 24px;
-  font-size: 14px;
-  font-weight: 600;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
   transition: all 0.3s ease;
-  min-width: 150px;
-  justify-content: space-between;
-}
-
-.user-dropdown-btn:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  transform: translateY(-2px);
-}
-
-.dropdown-arrow {
-  font-size: 10px;
-  transition: transform 0.3s ease;
-}
-
-.user-dropdown.active .dropdown-arrow {
-  transform: rotate(180deg);
-}
-
-.user-dropdown-menu {
-  display: none;
   position: absolute;
   top: 100%;
   left: 0;
@@ -330,7 +243,9 @@ form[action="/add"] button {
 }
 
 .user-dropdown.active .user-dropdown-menu {
-  display: block;
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
 }
 
 .user-dropdown-item {
@@ -365,6 +280,7 @@ form[action="/add"] button {
 .user-dropdown-item.add-member-btn:hover {
   background-color: #e9ecef;
 }
+
 
 .tab-view {
   margin: 0;
